@@ -16,8 +16,8 @@ def long_process(id, n):
 def create_input_data(n):
     #Ф-ция создает массив с n случайных чисел
     output=[]
-    for i in range(n):
-        output.append(random.randint(1,10))
+    for _ in range(n):
+        output.append(random.randint(2,10))
     return output
 
 def create_generators(input_data):
@@ -25,33 +25,29 @@ def create_generators(input_data):
     R={}
     for i in range(len(input_data)):
         full_process_name = "ID" +"_" + str(i)
-        R[full_process_name] = long_process(full_process_name, i)
+        R[full_process_name] = long_process(full_process_name, input_data[i])
     return R
 
-
-
-def a_lot_of_long_processes(q_ty_of_process):
-    #Создается кол-во процессов long_process равное q_ty_of_process
-    n = 0  
-    R={}
-    for _ in range(q_ty_of_process):
-        full_process_name = "ID" +"_" + str(n)
-        R[full_process_name] = long_process(full_process_name,random.randint(q_ty_of_process,q_ty_of_process+10))
-        for key in R:
-            print(R.keys())
-            print(R[key])
-        n += 1
+def working_generators(input_generators):
+    #Ф-ция запускает генераторы и возвращает сумму всех отработавших генераторов.
+    sum = 0
+    names={}
+    for key in input_generators:
+        names[key] = None
     while True == True :
-        flag = True
-        for key in R:
-            try :
-                next(R[key])
-                flag = False 
-            except:
-                pass
-        if flag == True:
+        if len(input_generators) == 0:
+            print(sum)
             break
-    print(R.keys(), R.values())
+        for key in input_generators:
+            if names[key] is None : 
+                names[key] = next(input_generators[key]) 
+            else:
+                print(names[key]) 
+                sum += names[key]
+                del names[key]
+                del input_generators[key]
+                break
+    return sum
 
-
+working_generators(create_generators(create_input_data(7)))
 
