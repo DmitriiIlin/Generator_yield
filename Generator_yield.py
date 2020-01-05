@@ -8,7 +8,7 @@ def long_process(id, n):
         print(id, sum, x, n)
         if x < n-1:
             #print(sum)
-            yield
+            yield None
         else:
             yield sum
 
@@ -28,26 +28,25 @@ def create_generators(input_data):
         R[full_process_name] = long_process(full_process_name, input_data[i])
     return R
 
+
 def working_generators(input_generators):
     #Ф-ция запускает генераторы и возвращает сумму всех отработавших генераторов.
     sum = 0
-    names={}
-    for key in input_generators:
-        names[key] = None
     while True == True :
         if len(input_generators) == 0:
             print(sum)
             break
-        for key in input_generators:
-            if names[key] is None : 
-                names[key] = next(input_generators[key]) 
-            else:
-                print(names[key]) 
-                sum += names[key]
-                del names[key]
-                del input_generators[key]
+        for generator in input_generators:
+            value=next(input_generators[generator]) 
+            if value == None:
+                print(value)
+                pass
+            else: 
+                print(value)
+                sum += value
+                del input_generators[generator]
                 break
     return sum
 
-working_generators(create_generators(create_input_data(7)))
+working_generators(create_generators(create_input_data(10)))
 
